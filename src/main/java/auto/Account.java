@@ -10,6 +10,21 @@ public class Account {
 	int money;
 	int level;
 	String map;
+	int windowX;
+	int windowY;
+	
+	public int getWindowX() {
+		return windowX;
+	}
+	public void setWindowX(int windowX) {
+		this.windowX = windowX;
+	}
+	public int getWindowY() {
+		return windowY;
+	}
+	public void setWindowY(int windowY) {
+		this.windowY = windowY;
+	}
 	public DesktopWindow getWindow() {
 		return window;
 	}
