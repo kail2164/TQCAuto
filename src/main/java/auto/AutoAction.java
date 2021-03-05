@@ -1,5 +1,6 @@
 package auto;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -34,10 +35,9 @@ public class AutoAction {
 		robot.keyRelease(KeyEvent.VK_ALT);
 	}
 
-	public static void click(Robot robot, int x, int y, int sleep) throws InterruptedException {
-		Thread.sleep(sleep);
-		robot.mouseMove(x, y);
-		Thread.sleep(100);
+	public static void click(Robot robot, int windowCoorsX, int windowCoorsY, AutoStep step) throws InterruptedException {
+		int[] coors = getCoor(windowCoorsX, windowCoorsY, step);
+		robot.mouseMove(coors[0], coors[1]);
 		robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
 		Thread.sleep(100);
 		robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
@@ -57,7 +57,7 @@ public class AutoAction {
 
 	public static boolean compareImage(File fileA, BufferedImage biB) {
 		try {
-			BufferedImage biA = ImageIO.read(fileA);
+			BufferedImage biA = ImageIO.read(fileA);			
 			if (biA.getWidth() == biB.getWidth() && biA.getHeight() == biB.getHeight()) {
 				for (int x = 0; x < biA.getWidth(); x++) {
 					for (int y = 0; y < biA.getHeight(); y++) {
@@ -74,35 +74,50 @@ public class AutoAction {
 		}
 		return false;
 	}
+
 	public static BufferedImage drawBlackAndWhite(BufferedImage img, String path, String name) {
 		BufferedImage blackAndWhiteImg = new BufferedImage(img.getWidth(), img.getHeight(),
 				BufferedImage.TYPE_BYTE_BINARY);
-		Graphics2D graphics = blackAndWhiteImg.createGraphics();
-		graphics.drawImage(img, 0, 0, null);
-		File f = new File(path + name+ ".jpg");
-		try {
-			ImageIO.write(blackAndWhiteImg, "jpg", f);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		Graphics2D graphic = blackAndWhiteImg.createGraphics();
+		graphic.drawImage(img, 0, 0, Color.WHITE, null);
+		graphic.dispose();
+//		File f = new File(path + name + ".png");
+//		try {
+//			ImageIO.write(blackAndWhiteImg, "png", f);
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		return blackAndWhiteImg;
 	}
-	public static BufferedImage capture(Robot robot, int x, int y, int w, int h) {
-		Rectangle rect = new Rectangle(x, y, w, h);
+
+	public static BufferedImage capture(Robot robot, int[] coors) {
+		Rectangle rect = new Rectangle(coors[0], coors[1], coors[2], coors[3]);
 		BufferedImage img = robot.createScreenCapture(rect);
-		return drawBlackAndWhite(img, "", "test");		
+		return drawBlackAndWhite(img, "", "test");
 	}
 
-	public static int[] convertToIntArr(String[] str) {
-		int[] result = new int[str.length];
-		for (int i = 0; i < str.length; i++) {
-			result[i] = Integer.parseInt(str[i]);
+	public static int[] convertToIntArr(String str, int windowX, int windowY) {
+		String[] arr = str.split(",");
+		int[] result = new int[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			if(i == 0) {
+				result[i] = Integer.parseInt(arr[i]) + windowX;
+			} else if (i == 1) {
+				result[i] = Integer.parseInt(arr[i]) + windowY;
+			} else {
+				result[i] = Integer.parseInt(arr[i]);
+			}
 		}
 		return result;
 	}
 
-	public static boolean captureAndCompare(Robot robot, int x, int y, int w, int h, File fileA) {
-		return compareImage(fileA, capture(robot, x, y, w, h));
+	public static boolean captureAndCompare(Robot robot, int[] coors, File fileA) {
+		return compareImage(fileA, capture(robot, coors));
+	}
+	
+	public static int[] getCoor(int windowCoorsX, int windowCoorsY, AutoStep step) {
+		int[] result = { windowCoorsX + step.getX(), windowCoorsY + step.getY()};
+		return result;
 	}
 }

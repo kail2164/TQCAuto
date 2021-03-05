@@ -116,6 +116,7 @@ public class Auto {
 			public void actionPerformed(ActionEvent e) {
 				try {
 //					for (Account acc : listAcc) {
+					startGame(listAcc.get(0));
 						login(listAcc.get(0));
 //					}
 				} catch (IOException e1) {
@@ -153,26 +154,21 @@ public class Auto {
 	
 	private static void startGame(Account acc) throws IOException, InterruptedException {
 		Desktop.getDesktop().open(new File("D:\\Games\\Dzogame_TamQuocChi_V16\\Loader.exe"));
-		Thread.sleep(1000);
+		Thread.sleep(500);
 		boolean isAbleToClick = false;
-		updateWindowCoors("Script");
-		String[] strArr = listImageCoors.get(0).split(",");
-		int[] coors = AutoAction.convertToIntArr(strArr);
+		updateWindowCoors("Script");		
+		int[] coors = AutoAction.convertToIntArr(listImageCoors.get(0), windowX, windowY);
 		while (!isAbleToClick) {		
 			Thread.sleep(200);
-			System.out.println(isAbleToClick);
-			isAbleToClick = AutoAction.captureAndCompare(robot, windowX + coors[0], windowY + coors[1], coors[2],coors[3], imageMap.get("LoaderNo"));
-			System.out.println(isAbleToClick);
+			isAbleToClick = AutoAction.captureAndCompare(robot, coors, imageMap.get("LoaderNo"));
 		}		
-		int x = listSteps.get(0).getX() + windowX, y = listSteps.get(0).getY() + windowY;
-		AutoAction.click(robot, x, y, 100);
+		AutoAction.click(robot, windowX, windowY, listSteps.get(0));
 		isAbleToClick = false;
 		updateWindowCoors("Sanol");
-		strArr = listImageCoors.get(1).split(",");
-		coors = AutoAction.convertToIntArr(strArr);
+		coors = AutoAction.convertToIntArr(listImageCoors.get(1), windowX, windowY);
 		while (!isAbleToClick) {			
 			Thread.sleep(200);
-			AutoAction.captureAndCompare(robot, windowX + coors[0], windowY + coors[1], coors[2],coors[3], imageMap.get("LoaderServer"));
+			isAbleToClick = AutoAction.captureAndCompare(robot, coors, imageMap.get("LoaderServer"));
 		}
 		WindowUtils.getAllWindows(true).forEach(desktopWindow -> {
 			if (desktopWindow.getTitle().contains("Sanol") && acc.getWindow() == null) {
@@ -182,16 +178,19 @@ public class Auto {
 				acc.setWindowY(rec.y);
 			}
 		});
-		x = listSteps.get(1).getX() + windowX;
-		y = listSteps.get(1).getY() + windowY;
-		AutoAction.click(robot, x, y, 100);
+		AutoAction.click(robot, windowX, windowY, listSteps.get(1));
 		isAbleToClick = false;
+		Thread.sleep(2000);
 		updateWindowCoors("Three");
-		strArr = listImageCoors.get(2).split(",");
-		coors = AutoAction.convertToIntArr(strArr);
+		coors = AutoAction.convertToIntArr(listImageCoors.get(2), windowX, windowY);
 		while (!isAbleToClick) {			
 			Thread.sleep(200);
-			AutoAction.captureAndCompare(robot, windowX + coors[0], windowY + coors[1], coors[2],coors[3], imageMap.get("GameAccept"));
+			isAbleToClick = AutoAction.captureAndCompare(robot, coors, imageMap.get("GameAccept"));
+		}
+		AutoAction.click(robot, windowX, windowY, listSteps.get(2));
+		for(int i = 0; i < 2; i++) {
+			Thread.sleep(1500);
+			AutoAction.click(robot, windowX, windowY, listSteps.get(2));
 		}
 		WindowUtils.getAllWindows(true).forEach(desktopWindow -> {
 			if (desktopWindow.getTitle().contains("Three") && acc.getWindow() == null) {
@@ -202,45 +201,52 @@ public class Auto {
 				acc.setWindowX(rec.x);
 				acc.setWindowY(rec.y);
 			}
-		});
-		x = listSteps.get(2).getX() + windowX;
-		y = listSteps.get(2).getY() + windowY;
-		AutoAction.click(robot, x, y, 100);	
+		});		
 	}
 
 	private static void login(Account acc) throws IOException, InterruptedException {
-		startGame(acc);
-//		for (AutoStep step : listSteps) {
-//			
-//			int x = step.getX() + acc.getWindowX(), y = step.getY() + acc.getWindowY();
-//			if (step.getKey().equals("AutoStart")) {
-//				AutoAction.toggleAuto(robot);
-//				AutoAction.click(robot, x, y, step.getWaitTime() + 200);
-//				AutoAction.toggleAuto(robot);
-//				AutoAction.toggleInventory(robot);
-//			} else {
-//				AutoAction.click(robot, x, y, step.getWaitTime() + 200);
-//				if (step.getDelay() > 0) {
-//					for (int i = 0; i < step.getDelayTimes(); i++) {
-//						AutoAction.click(robot, x + 5 * (i + 1), y + 5 * (i + 1), step.getDelay());
-//					}
-//				}
-//			}
-//			switch (step.getKey()) {
-//			case "GameID": {
-//				AutoAction.type(robot, acc.getUsername());
-//				Thread.sleep(200);
-//			}
-//				break;
-//			case "GamePW": {
-//				AutoAction.type(robot, acc.getPassword());
-//				Thread.sleep(200);
-//			}
-//				break;
-//			default:
-//				break;
-//			}
-//		}
+		Thread.sleep(500);
+		boolean isAbleToClick = false;
+		int[] coors = AutoAction.convertToIntArr(listImageCoors.get(3), windowX, windowY);
+		while (!isAbleToClick) {		
+			Thread.sleep(200);
+			isAbleToClick = AutoAction.captureAndCompare(robot, coors, imageMap.get("GameTamQuocServer"));
+		}		
+		isAbleToClick = false;
+		AutoAction.click(robot, windowX, windowY, listSteps.get(3));
+		AutoAction.click(robot, windowX, windowY, listSteps.get(4));
+		AutoAction.type(robot, acc.getUsername());
+		Thread.sleep(200);
+		AutoAction.click(robot, windowX, windowY, listSteps.get(5));
+		AutoAction.type(robot, acc.getPassword());
+		Thread.sleep(200);
+		AutoAction.click(robot, windowX, windowY, listSteps.get(6));
+		coors = AutoAction.convertToIntArr(listImageCoors.get(4), windowX, windowY);
+		while (!isAbleToClick) {			
+			Thread.sleep(200);
+			isAbleToClick = AutoAction.captureAndCompare(robot, coors, imageMap.get("GameSelectSub"));
+		}
+		isAbleToClick = false;
+		AutoAction.click(robot, windowX, windowY, listSteps.get(7));
+		AutoAction.click(robot, windowX, windowY, listSteps.get(8));
+		coors = AutoAction.convertToIntArr(listImageCoors.get(5), windowX, windowY);
+		while (!isAbleToClick) {			
+			Thread.sleep(200);
+			isAbleToClick = AutoAction.captureAndCompare(robot, coors, imageMap.get("CharAccept"));
+		}
+		AutoAction.click(robot, windowX, windowY, listSteps.get(9));
+		AutoAction.click(robot, windowX, windowY, listSteps.get(10));
+		coors = AutoAction.convertToIntArr(listImageCoors.get(6), windowX, windowY);
+		while (!isAbleToClick) {			
+			Thread.sleep(200);
+			isAbleToClick = AutoAction.captureAndCompare(robot, coors, imageMap.get("AutoStart"));
+		}
+		Thread.sleep(3000);
+		AutoAction.toggleAuto(robot);
+		AutoAction.click(robot, windowX, windowY, listSteps.get(11));
+		AutoAction.toggleAuto(robot);
+		AutoAction.toggleInventory(robot);
+
 	}
 
 	private static void showWindow(HWND hWnd) {

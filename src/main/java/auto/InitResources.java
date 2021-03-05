@@ -10,13 +10,13 @@ public class InitResources {
 	
 	public static Map<String,File>  initImageMap() {
 		Map<String, File> map = new HashMap<>();
-		map.put("LoaderNo", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\LoaderNo.jpg"));
-		map.put("LoaderServer", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\LoaderServer.jpg"));
-		map.put("GameAccept", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameAccept.jpg"));
-		map.put("GameTamQuocServer", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameTamQuocServer.jpg"));
-		map.put("GameSelectSub", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameSelectSub.jpg"));
-		map.put("CharAccept", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\CharAccept.jpg"));
-		map.put("AutoStart", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\AutoStart.jpg"));
+		map.put("LoaderNo", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\LoaderNo.png"));
+		map.put("LoaderServer", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\LoaderServer.png"));
+		map.put("GameAccept", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameAccept.png"));
+		map.put("GameTamQuocServer", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameTamQuocServer.png"));
+		map.put("GameSelectSub", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameSelectSub.png"));
+		map.put("CharAccept", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\CharAccept.png"));
+		map.put("AutoStart", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\AutoStart.png"));
 		return map;
 	}
 	public static List<String> initListImageCoors(){
@@ -75,7 +75,7 @@ public class InitResources {
 
 	public static List<AutoStep> initListStep() {
 		List<AutoStep>	listSteps = new ArrayList<>();
-		AutoStep step = new AutoStep("LoaderNo", 375, 400, 0, 0);
+		AutoStep step = new AutoStep("LoaderNo", 235, 250, 0, 0);
 		listSteps.add(step);
 		step = new AutoStep("LoaderServer", 580, 530, 0, 0);
 		listSteps.add(step);
