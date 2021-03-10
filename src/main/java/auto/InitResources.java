@@ -19,6 +19,22 @@ public class InitResources {
 		map.put("AutoStart", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\AutoStart.png"));
 		return map;
 	}
+	
+	public static List<File>  initListNumber() {
+		List<File> list = new ArrayList<>();
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\0.png"));
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\1.png"));
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\2.png"));
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\3.png"));
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\4.png"));
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\5.png"));
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\6.png"));
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\7.png"));
+		list.add( new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\8.png"));
+		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\9.png"));		
+		return list;
+	}
+	
 	public static List<String> initListImageCoors(){
 		List<String> result = new ArrayList<>();
 		result.add("5,30,360,180");
@@ -75,34 +91,33 @@ public class InitResources {
 
 	public static List<AutoStep> initListStep() {
 		List<AutoStep>	listSteps = new ArrayList<>();
-		AutoStep step = new AutoStep("LoaderNo", 235, 250, 0, 0);
+		AutoStep step = new AutoStep("LoaderNo", 235, 250);
 		listSteps.add(step);
-		step = new AutoStep("LoaderServer", 580, 530, 0, 0);
+		step = new AutoStep("LoaderServer", 580, 530);
 		listSteps.add(step);
-		step = new AutoStep("GameAccept", 475, 570, 0, 1700);
-		step.setDelayTimes(2);
+		step = new AutoStep("GameAccept", 475, 570);
 		listSteps.add(step);
-		step = new AutoStep("GameTamQuocServer", 450, 300, 0, 0);
+		step = new AutoStep("GameTamQuocServer", 450, 300);
 		listSteps.add(step);
-		step = new AutoStep("GameID", 475, 705, 0, 0);
+		step = new AutoStep("GameID", 475, 705);
 		listSteps.add(step);
-		step = new AutoStep("GamePW", 475, 735, 0, 0);
+		step = new AutoStep("GamePW", 475, 735);
 		listSteps.add(step);
-		step = new AutoStep("GameLogin", 460, 670, 0, 0);
+		step = new AutoStep("GameLogin", 460, 670);
 		listSteps.add(step);
-//		step = new AutoStep("GameSub1", 500, 300, 2000, 0);
+//		step = new AutoStep("GameSub1", 500, 300);
 //		listSteps.add(step);
-//		step = new AutoStep("GameSub2", 500, 330, 2000, 0);
+//		step = new AutoStep("GameSub2", 500, 330);
 //		listSteps.add(step);
-		step = new AutoStep("GameSub3", 500, 360, 0, 0);
+		step = new AutoStep("GameSub3", 500, 360);
 		listSteps.add(step);
-		step = new AutoStep("GameSelectSub", 450, 610, 0, 0);
+		step = new AutoStep("GameSelectSub", 450, 610);
 		listSteps.add(step);
-		step = new AutoStep("CharAccept", 515, 460, 0, 0);
+		step = new AutoStep("CharAccept", 515, 460);
 		listSteps.add(step);
-		step = new AutoStep("CharPlay", 925, 425, 0, 0);
+		step = new AutoStep("CharPlay", 925, 425);
 		listSteps.add(step);
-		step = new AutoStep("AutoStart", 598, 168, 0, 0);
+		step = new AutoStep("AutoStart", 598, 168);
 		listSteps.add(step);
 		return listSteps;
 	}

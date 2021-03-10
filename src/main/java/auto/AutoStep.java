@@ -3,18 +3,10 @@ package auto;
 public class AutoStep {
 	String key;
 	int x;
-	int y;
-	int waitTime;
-	int delay;
-	int delayTimes;
+	int y;	
 	
 	
-	public int getDelayTimes() {
-		return delayTimes;
-	}
-	public void setDelayTimes(int delayTimes) {
-		this.delayTimes = delayTimes;
-	}
+
 	public String getKey() {
 		return key;
 	}
@@ -33,24 +25,11 @@ public class AutoStep {
 	public void setY(int y) {
 		this.y = y;
 	}
-	public int getWaitTime() {
-		return waitTime;
-	}
-	public void setWaitTime(int waitTime) {
-		this.waitTime = waitTime;
-	}
-	public int getDelay() {
-		return delay;
-	}
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
-	public AutoStep(String key, int x, int y, int waitTime, int delay) {
+	
+	public AutoStep(String key, int x, int y) {
 		super();
 		this.key = key;
 		this.x = x;
-		this.y = y;
-		this.waitTime = waitTime;
-		this.delay = delay;
+		this.y = y;		
 	}	
 }
