@@ -1,52 +1,149 @@
 package auto;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InitResources {
+import utils.FileUtils;
+
+public class Resources {
+
+	private static Map<String, File> imageMap;
+	private static Map<Integer, BufferedImage> cashDigitsMap;
+	private static Map<Integer, BufferedImage> pointDigitsMap;
+	private static Map<String, Integer[]> stepImageCoorsMap;
+	private static Map<String, Integer[]> characterImageCoorsMap;
+
+	private static Map<String, Integer[]> stepCoorsMap;
+	private static List<Account> listAcc1;
+	private static List<Account> listAcc2;
+
+	static {
+		initImageMap();
+		try {
+			initCashDigitsMap();
+			initPointDigitsMap();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		initListAcc();
+		initListAcc2();
+		initStepCoorsMap();
+		initCharacterImageCoorsMap();
+		initStepImageCoorsMap();
+		initStepCoorsMap();
+	}
 	
-	public static Map<String,File>  initImageMap() {
+
+	public static Map<String, Integer[]> getStepImageCoorsMap() {
+		return stepImageCoorsMap;
+	}
+
+	public static Map<String, Integer[]> getCharacterImageCoorsMap() {
+		return characterImageCoorsMap;
+	}
+
+	public static Map<Integer, BufferedImage> getPointDigitsMap() {
+		return pointDigitsMap;
+	}
+
+	public static List<Account> getListAcc1() {
+		return listAcc1;
+	}
+
+	public static List<Account> getListAcc2() {
+		return listAcc2;
+	}
+
+	public static Map<String, File> getImageMap() {
+		return imageMap;
+	}
+
+	public static Map<Integer, BufferedImage> getCashDigitsMap() {
+		return cashDigitsMap;
+	}
+
+	public static Map<String, Integer[]> getStepCoorsMap() {
+		return stepCoorsMap;
+	}
+
+	private static void initImageMap() {
 		Map<String, File> map = new HashMap<>();
-		map.put("LoaderNo", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\LoaderNo.png"));
-		map.put("LoaderServer", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\LoaderServer.png"));
-		map.put("GameAccept", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameAccept.png"));
-		map.put("GameTamQuocServer", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameTamQuocServer.png"));
-		map.put("GameSelectSub", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\GameSelectSub.png"));
-		map.put("CharAccept", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\CharAccept.png"));
-		map.put("AutoStart", new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\AutoStart.png"));
-		return map;
+		map.put("LoaderNo", new File("./img\\LoaderNo.png"));
+		map.put("LoaderServer", new File("./img\\LoaderServer.png"));
+		map.put("GameAccept", new File("./img\\GameAccept.png"));
+		map.put("GameTamQuocServer", new File("./img\\GameTamQuocServer.png"));
+		map.put("GameSelectSub", new File("./img\\GameSelectSub.png"));
+		map.put("CharAccept", new File("./img\\CharAccept.png"));
+		map.put("AutoStart", new File("./img\\AutoStart.png"));
+		imageMap = map;
 	}
-	
-	public static List<File>  initListNumber() {
-		List<File> list = new ArrayList<>();
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\0.png"));
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\1.png"));
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\2.png"));
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\3.png"));
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\4.png"));
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\5.png"));
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\6.png"));
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\7.png"));
-		list.add( new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\8.png"));
-		list.add(new File("D:\\Projects\\AutoTQC\\src\\main\\java\\img\\numbers\\9.png"));		
-		return list;
+
+	private static void initCashDigitsMap() throws IOException {
+		Map<Integer, BufferedImage> map = new HashMap<>();
+		map.put(0, FileUtils.getImage("./img\\numbers\\0-inv-digit.png"));
+		map.put(1, FileUtils.getImage("./img\\numbers\\1-inv-digit.png"));
+		map.put(2, FileUtils.getImage("./img\\numbers\\2-inv-digit.png"));
+		map.put(3, FileUtils.getImage("./img\\numbers\\3-inv-digit.png"));
+		map.put(4, FileUtils.getImage("./img\\numbers\\4-inv-digit.png"));
+		map.put(5, FileUtils.getImage("./img\\numbers\\5-inv-digit.png"));
+		map.put(6, FileUtils.getImage("./img\\numbers\\6-inv-digit.png"));
+		map.put(7, FileUtils.getImage("./img\\numbers\\7-inv-digit.png"));
+		map.put(8, FileUtils.getImage("./img\\numbers\\8-inv-digit.png"));
+		map.put(9, FileUtils.getImage("./img\\numbers\\9-inv-digit.png"));
+		cashDigitsMap = map;
 	}
-	
-	public static List<String> initListImageCoors(){
-		List<String> result = new ArrayList<>();
-		result.add("5,30,360,180");
-		result.add("525,500,115,60");
-		result.add("280,230,475,20");
-		result.add("410,650,220,30");
-		result.add("390,595,260,40");
-		result.add("360,340,320,150");
-		result.add("745,770,270,20");
-		return result;
+
+	private static void initPointDigitsMap() throws IOException {
+		Map<Integer, BufferedImage> map = new HashMap<>();
+		map.put(0, FileUtils.getImage("./img\\numbers\\0-digit.png"));
+		map.put(1, FileUtils.getImage("./img\\numbers\\1-digit.png"));
+		map.put(2, FileUtils.getImage("./img\\numbers\\2-digit.png"));
+		map.put(3, FileUtils.getImage("./img\\numbers\\3-digit.png"));
+		map.put(4, FileUtils.getImage("./img\\numbers\\4-digit.png"));
+		map.put(5, FileUtils.getImage("./img\\numbers\\5-digit.png"));
+		map.put(6, FileUtils.getImage("./img\\numbers\\6-digit.png"));
+		map.put(7, FileUtils.getImage("./img\\numbers\\7-digit.png"));
+		map.put(8, FileUtils.getImage("./img\\numbers\\8-digit.png"));
+		map.put(9, FileUtils.getImage("./img\\numbers\\9-digit.png"));
+		pointDigitsMap = map;
 	}
-	public static List<Account> initListAcc() {
+
+	private static void initStepImageCoorsMap() {
+		Map<String, Integer[]> map = new HashMap<>();
+		map.put("LoaderNo", new Integer[] { 5, 30, 360, 180 });
+		map.put("LoaderServer", new Integer[] { 525, 500, 115, 60 });
+		map.put("GameAccept", new Integer[] { 280, 230, 475, 20 });
+		map.put("GameTamQuocServer", new Integer[] { 430, 660, 180, 20 });
+		map.put("GameSelectSub", new Integer[] { 420, 605, 200, 25 });
+		map.put("CharAccept", new Integer[] { 360, 340, 320, 150 });
+		map.put("AutoStart", new Integer[] { 745, 770, 270, 20 });	
+		stepImageCoorsMap = map;
+	}
+
+	private static void initCharacterImageCoorsMap() {
+		Map<String, Integer[]> map = new HashMap<>();		
+		map.put("Map", new Integer[] { 30, 622, 220, 20 });
+		map.put("Location", new Integer[] { 755, 730, 272, 40 });
+		map.put("Info", new Integer[] { 15, 655, 260, 20 });
+		map.put("Stats", new Integer[] { 106, 297, 128, 132 });
+		map.put("Inventory", new Integer[] { 579, 179, 360, 288 });
+		map.put("Cash", new Integer[] { 635, 499, 130, 9 });
+		map.put("Points", new Integer[] { 213, 454, 27, 10 });
+		characterImageCoorsMap = map;
+	}
+	private static void initListAcc2() {
+		List<Account> listAcc = new ArrayList<Account>();
+		Account acc = new Account("kail14", "12345678@Ab", "K01");
+		listAcc.add(acc);
+		listAcc2 = listAcc;
+	}
+
+	private static void initListAcc() {
 		List<Account> listAcc = new ArrayList<Account>();
 		Account acc = new Account("headshot1st", "123456789", "K01");
 		listAcc.add(acc);
@@ -85,40 +182,28 @@ public class InitResources {
 		acc = new Account("kail04", "123456", "Kail18");
 		listAcc.add(acc);
 		acc = new Account("kail2164", "123456789", "Kail");
-		listAcc.add(acc);		
-		return listAcc;
+		listAcc.add(acc);
+		listAcc1 = listAcc;
 	}
 
-	public static List<AutoStep> initListStep() {
-		List<AutoStep>	listSteps = new ArrayList<>();
-		AutoStep step = new AutoStep("LoaderNo", 235, 250);
-		listSteps.add(step);
-		step = new AutoStep("LoaderServer", 580, 530);
-		listSteps.add(step);
-		step = new AutoStep("GameAccept", 475, 570);
-		listSteps.add(step);
-		step = new AutoStep("GameTamQuocServer", 450, 300);
-		listSteps.add(step);
-		step = new AutoStep("GameID", 475, 705);
-		listSteps.add(step);
-		step = new AutoStep("GamePW", 475, 735);
-		listSteps.add(step);
-		step = new AutoStep("GameLogin", 460, 670);
-		listSteps.add(step);
-//		step = new AutoStep("GameSub1", 500, 300);
-//		listSteps.add(step);
-//		step = new AutoStep("GameSub2", 500, 330);
-//		listSteps.add(step);
-		step = new AutoStep("GameSub3", 500, 360);
-		listSteps.add(step);
-		step = new AutoStep("GameSelectSub", 450, 610);
-		listSteps.add(step);
-		step = new AutoStep("CharAccept", 515, 460);
-		listSteps.add(step);
-		step = new AutoStep("CharPlay", 925, 425);
-		listSteps.add(step);
-		step = new AutoStep("AutoStart", 598, 168);
-		listSteps.add(step);
-		return listSteps;
+	private static void initStepCoorsMap() {
+		Map<String, Integer[]> map = new HashMap<>();
+		map.put("LoaderNo", new Integer[] { 235, 250 });
+		map.put("LoaderServer", new Integer[] { 580, 530 });
+		map.put("GameAccept", new Integer[] { 475, 570 });
+		map.put("GameTamQuocServer", new Integer[] { 450, 300 });
+		map.put("GameID", new Integer[] { 475, 705 });
+		map.put("GamePW", new Integer[] { 475, 735 });
+		map.put("GameLogin", new Integer[] { 460, 670 });
+		map.put("GameSub1", new Integer[] { 500, 300 });
+		map.put("GameSub2", new Integer[] { 500, 330 });
+		map.put("GameSub3", new Integer[] { 500, 360 });
+		map.put("GameSelectSub", new Integer[] { 450, 610 });
+		map.put("CharAccept", new Integer[] { 515, 460 });
+		map.put("CharPlay", new Integer[] { 925, 425 });
+		map.put("AutoStart", new Integer[] { 598, 168 });
+		map.put("SortInv", new Integer[] { 860, 150 });
+		map.put("Remove", new Integer[] { 855, 515 });
+		stepCoorsMap = map;
 	}
 }

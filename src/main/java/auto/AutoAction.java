@@ -1,7 +1,5 @@
 package auto;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -10,15 +8,17 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import utils.FileUtils;
+import utils.ImageUtils;
 
 public class AutoAction {
 	public static void toggleAuto(Robot robot) throws InterruptedException {
@@ -37,7 +37,8 @@ public class AutoAction {
 		robot.keyRelease(KeyEvent.VK_ALT);
 	}
 
-	public static void click(Robot robot, int windowCoorsX, int windowCoorsY, AutoStep step) throws InterruptedException {
+	public static void click(Robot robot, int windowCoorsX, int windowCoorsY, Integer[] step)
+			throws InterruptedException {
 		int[] coors = getCoor(windowCoorsX, windowCoorsY, step);
 		Thread.sleep(100);
 		robot.mouseMove(coors[0], coors[1]);
@@ -60,140 +61,75 @@ public class AutoAction {
 		robot.keyRelease(KeyEvent.VK_CONTROL);
 	}
 
-	public static boolean compareImage(File fileA, BufferedImage biB, boolean isNumber) {
-		try {
-			BufferedImage biA = ImageIO.read(fileA);			
-			int totalMatching = 0;
-			if (biA.getWidth() == biB.getWidth() && biA.getHeight() == biB.getHeight()) {
-				for (int x = 1; x < biA.getWidth(); x++) {
-					for (int y = 0; y < biA.getHeight(); y++) {
-						if (biA.getRGB(x, y) == biB.getRGB(x, y)) {
-							totalMatching++;
-						}
-					}
-				}
-				if(isNumber) {
-					if(totalMatching/((biA.getWidth()-1) * (biA.getHeight()))*100 <= 85) {
-						totalMatching = 0;
-						for (int x = 0; x < biA.getWidth()-1; x++) {
-							for (int y = 0; y < biA.getHeight(); y++) {
-								if (biA.getRGB(x, y) == biB.getRGB(x, y)) {
-									totalMatching++;
-								}
-							}
-						}
-					}
-				}
-				return totalMatching/((biA.getWidth()-1) * (biA.getHeight()))*100 > 85;				
-			} else {
-				return false;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	public static BufferedImage drawBlackAndWhite(BufferedImage img, String path, String name, boolean isCreateFile) {
-		BufferedImage blackAndWhiteImg = new BufferedImage(img.getWidth(), img.getHeight(),
-				BufferedImage.TYPE_BYTE_BINARY);
-		Graphics2D graphic = blackAndWhiteImg.createGraphics();
-		graphic.drawImage(img, 0, 0, Color.WHITE, null);
-		graphic.dispose();
-		if(isCreateFile) {
+	public static void drawBlackAndWhite(BufferedImage img, String path, String name, boolean isCreateFile) {
+		if (isCreateFile) {
 			File f = new File(path + name + ".png");
 			try {
-				ImageIO.write(blackAndWhiteImg, "png", f);
+				ImageIO.write(ImageUtils.getBlackAndWhiteImage(img), "png", f);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		}		
-		return blackAndWhiteImg;
-	}	
-	public static BufferedImage capture(Robot robot, int[] coors, String path, String name, boolean isCreateFile) {
+		}
+	}
+
+	public static BufferedImage draw(BufferedImage img, String name, boolean isCreateFile) {
+		if (isCreateFile) {
+			FileUtils.writeFile(img, "./img\\" + name + ".png");
+		}
+		return img;
+	}
+
+	public static JSONObject getCharacter(BufferedImage img) {
+		Map<String, Integer[]> coorsMap = Resources.getCharacterImageCoorsMap();
+//		String map = ImageUtils.getBase64(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Map")));
+//		String location = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Location")));
+//		String info = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Info")));
+//		String stats = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Stats")));
+//		String inventory = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Inventory")));
+		JSONArray inventory = ImageUtils.getInventory(ImageUtils.getSubImage(img, coorsMap.get("Inventory")));
+//		int points = NumberUtils.detectNumber(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Points")), Resources.getPointDigitsMap());
+//		int cash = NumberUtils.detectNumber(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Cash")), Resources.getCashDigitsMap());
+		JSONObject result = new JSONObject();
+//		result.put("map", map);
+//		result.put("location", location);
+//		result.put("info", info);
+//		result.put("stats", stats);
+//		result.put("inventory", inventory);
+//		result.put("points", points);
+//		result.put("cash", cash);
+//		result.put("character", "KailSell");
+		result.put("inventory", inventory);
+		return result;
+	}
+
+	public static void sendCharacter(BufferedImage img) {
+		getCharacter(img);
+//		RestTemplate template = new RestTemplate();	
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setContentType(MediaType.APPLICATION_JSON);		
+//		HttpEntity<String> request = new HttpEntity<>(getCharacter(img).toString(), headers);
+//		template.exchange("http://192.168.1.81:3000/character", HttpMethod.POST, request, String.class);
+	}
+
+	public static BufferedImage captureRGB(Robot robot, int[] coors, String name, boolean isCreateFile) {
 		Rectangle rect = new Rectangle(coors[0], coors[1], coors[2], coors[3]);
 		BufferedImage img = robot.createScreenCapture(rect);
-		return drawBlackAndWhite(img, path, name, isCreateFile);
+		return draw(img, name, isCreateFile);
 	}
 
-	public static int[] convertToIntArr(String str, int windowX, int windowY) {
-		String[] arr = str.split(",");
-		int[] result = new int[arr.length];
-		for (int i = 0; i < arr.length; i++) {
-			if(i == 0) {
-				result[i] = Integer.parseInt(arr[i]) + windowX;
-			} else if (i == 1) {
-				result[i] = Integer.parseInt(arr[i]) + windowY;
-			} else {
-				result[i] = Integer.parseInt(arr[i]);
-			}
-		}
+	public static BufferedImage capture(Robot robot, Integer[] coors, String path, String name, boolean isCreateFile) {
+		Rectangle rect = new Rectangle(coors[0], coors[1], coors[2], coors[3]);
+		BufferedImage img = robot.createScreenCapture(rect);
+		return ImageUtils.getBlackAndWhiteImage(img);
+	}
+
+	public static boolean captureAndCompare(Robot robot, Integer[] coors, File fileA) {
+		return ImageUtils.compareImage(fileA, capture(robot, coors, "", "", false), false);
+	}
+
+	public static int[] getCoor(int windowCoorsX, int windowCoorsY, Integer[] step) {
+		int[] result = { windowCoorsX + step[0], windowCoorsY + step[1] };
 		return result;
 	}
 
-	public static boolean captureAndCompare(Robot robot, int[] coors, File fileA) {
-		return compareImage(fileA, capture(robot, coors, "", "", false), false);
-	}
-	
-	public static int[] getCoor(int windowCoorsX, int windowCoorsY, AutoStep step) {
-		int[] result = { windowCoorsX + step.getX(), windowCoorsY + step.getY()};
-		return result;
-	}
-	
-	//0 : 608 204 4 8
-	public static int getValue(Robot robot, List<File> numberList, int[] coors) {	
-		BufferedImage img = capture(robot, coors, "", "", false);	
-		int result = -1, index = 0;
-		int[] originalCoors = coors;
-		for(File file : numberList) {			
-			if(compareImage(file, img, true)) {
-				result = index;
-				break;
-			}
-			index++;
-		}
-		for(int i = 0; i < 2; i++) {
-			if(result < 0) {
-				coors[0] -= 1;
-				img = capture(robot, coors, "", "", false);	
-				index = 0;
-				for(File file : numberList) {			
-					if(compareImage(file, img, true)) {
-						result = index;
-						break;
-					}
-					index++;
-				}
-			} else {
-				break;
-			}
-		}
-		for(int i = 0; i < 2; i++) {
-			if(result > 0) {
-				originalCoors[0] += 1;
-				img = capture(robot, originalCoors, "", "", false);	
-				index = 0;
-				for(File file : numberList) {			
-					if(compareImage(file, img, true)) {
-						result = index;
-						break;
-					}
-					index++;
-				}
-			} else {
-				break;
-			}
-		}
-		if(result < 0) result = 0;
-		return result;
-	}
-	public static int getItemAmount(Robot robot, int windowX, int windowY, int col, int row, List<File> numberList) throws IOException {
-		int[] coors = { windowX + 608 + col*36, windowY + 204 + row*36, 4, 8 };
-		int last = getValue(robot, numberList, coors);
-		int[] coorsMiddle = { coors[0] - 7 , coors[1], 4, 8 };
-		int middle = getValue(robot, numberList, coorsMiddle);	
-		int[] coorFirst = { coorsMiddle[0] - 7 , coors[1], 4, 8 };
-		int first = getValue(robot, numberList, coorFirst);
-		return first * 100 + middle * 10 + last;
-	}
 }
