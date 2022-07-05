@@ -129,11 +129,13 @@ public class Resources {
 		Map<String, Integer[]> map = new HashMap<>();		
 		map.put("Map", new Integer[] { 30, 622, 220, 20 });
 		map.put("Location", new Integer[] { 755, 730, 272, 40 });
-		map.put("Info", new Integer[] { 15, 655, 260, 20 });
+		map.put("Info", new Integer[] { 15, 655, 260, 140 });
 		map.put("Stats", new Integer[] { 106, 297, 128, 132 });
 		map.put("Inventory", new Integer[] { 579, 179, 360, 288 });
 		map.put("Cash", new Integer[] { 635, 499, 130, 9 });
 		map.put("Points", new Integer[] { 213, 454, 27, 10 });
+		map.put("ItemAmount", new Integer[] { 0, 20, 35, 15 });
+		map.put("Level", new Integer[] { 195, 165, 30, 10 });
 		characterImageCoorsMap = map;
 	}
 	private static void initListAcc2() {

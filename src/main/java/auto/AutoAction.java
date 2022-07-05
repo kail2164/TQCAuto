@@ -16,9 +16,15 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 
 import utils.FileUtils;
 import utils.ImageUtils;
+import utils.NumberUtils;
 
 public class AutoAction {
 	public static void toggleAuto(Robot robot) throws InterruptedException {
@@ -81,34 +87,34 @@ public class AutoAction {
 
 	public static JSONObject getCharacter(BufferedImage img) {
 		Map<String, Integer[]> coorsMap = Resources.getCharacterImageCoorsMap();
-//		String map = ImageUtils.getBase64(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Map")));
-//		String location = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Location")));
-//		String info = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Info")));
-//		String stats = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Stats")));
-//		String inventory = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Inventory")));
+		String map = ImageUtils.getBase64(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Map")));
+		String location = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Location")));
+		String info = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Info")));
+		String stats = ImageUtils.getBase64(ImageUtils.getSubImage(img, coorsMap.get("Stats")));
 		JSONArray inventory = ImageUtils.getInventory(ImageUtils.getSubImage(img, coorsMap.get("Inventory")));
-//		int points = NumberUtils.detectNumber(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Points")), Resources.getPointDigitsMap());
-//		int cash = NumberUtils.detectNumber(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Cash")), Resources.getCashDigitsMap());
+		int cash = NumberUtils.detectNumberCash(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Cash")));
+		int points = NumberUtils.detectNumberPoints(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Points")));
+		int level = NumberUtils.detectNumberPoints(ImageUtils.getSubImageBlackAndWhite(img, coorsMap.get("Level")));
 		JSONObject result = new JSONObject();
-//		result.put("map", map);
-//		result.put("location", location);
-//		result.put("info", info);
-//		result.put("stats", stats);
-//		result.put("inventory", inventory);
-//		result.put("points", points);
-//		result.put("cash", cash);
-//		result.put("character", "KailSell");
+		result.put("map", map);
+		result.put("location", location);
+		result.put("info", info);
+		result.put("stats", stats);
+		result.put("inventory", inventory);
+		result.put("points", points);
+		result.put("cash", cash);
+		result.put("level", level);
+		result.put("character", "KailSell");
 		result.put("inventory", inventory);
 		return result;
 	}
 
 	public static void sendCharacter(BufferedImage img) {
-		getCharacter(img);
-//		RestTemplate template = new RestTemplate();	
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.setContentType(MediaType.APPLICATION_JSON);		
-//		HttpEntity<String> request = new HttpEntity<>(getCharacter(img).toString(), headers);
-//		template.exchange("http://192.168.1.81:3000/character", HttpMethod.POST, request, String.class);
+		RestTemplate template = new RestTemplate();	
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);		
+		HttpEntity<String> request = new HttpEntity<>(getCharacter(img).toString(), headers);
+		template.exchange("http://192.168.1.81:3000/info", HttpMethod.POST, request, String.class);
 	}
 
 	public static BufferedImage captureRGB(Robot robot, int[] coors, String name, boolean isCreateFile) {

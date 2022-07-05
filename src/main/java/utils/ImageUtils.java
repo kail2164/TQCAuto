@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import auto.Resources;
 import dto.Cell;
 
 public class ImageUtils {
@@ -108,13 +109,12 @@ public class ImageUtils {
 		Cell cell = new Cell();
 		cell.setEmpty(isEmpty);
 		cell.setLocked(isLocked);
-//		if(!isEmpty && !isLocked) {
-//			cell.setBase64(getBase64(item));
-//		}
+		if(!isEmpty && !isLocked) {
+			cell.setBase64(getBase64(item));			
+		}
 		cell.setPosition(position);
 		cell.setType(type);
 		JSONObject obj = new JSONObject(cell);
-		System.out.println(obj.toString());
 		return obj;
 	}
 
